@@ -1,11 +1,11 @@
 import java.lang.reflect.Array;
 import java.util.Comparator;
-import java.util.Iterator;
 
 /**
- * ArrayList
- * Created to imitate ArrayList implemented by Java
- * @param <T> clazz - Pass class type of your data
+ * ArrayList is an implementation of resizable array. Implements some of the list operations and permits all elements.
+ * All ArrayLists have internal capacity, which tracks if new memory should be allocated.
+ *
+ * Be warned, that this ArrayList is not Synchronized.
  */
 @SuppressWarnings("unchecked")
 public class ArrayList<T extends Comparable<T>> implements List<T> {
@@ -16,6 +16,9 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
 
     final Class<T> objectType;
 
+    /**
+     * Constructs an empty list with an initial capacity of ten
+     */
     ArrayList(Class<T> clazz) {
         this.freeMemory = 10;
         this.array = (T[]) Array.newInstance(clazz, this.freeMemory);
@@ -23,6 +26,10 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
         this.lastFreeIndex = 0;
     }
 
+    /**
+     * Constructs a list containing the elements of the specified array, in the order they are placed
+     * @param array - The array whose elements are to be placed into this list
+     */
     ArrayList(Class<T> clazz, T[] array) {
         this.objectType = clazz;
         this.freeMemory = 10;
@@ -38,6 +45,10 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
         for (int i = 0; i < this.array.length; ++i) this.array[i] = copy[i];
     }
 
+    /**
+     * Appends the specified element to the end of this list
+     * @param element - element to be appended to this list
+     */
     @Override
     public void add(T element) {
         if (this.freeMemory == 0) {
@@ -48,6 +59,11 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
         --this.freeMemory;
     }
 
+    /**
+     * Insert the specified element at the specified position. Shifts the element
+     * @param index - place in an array, where element will be inserted
+     * @param element - element, which will be added to array
+     */
     @Override
     public void add(int index, T element) {
         if (index >= this.array.length) throw new IndexOutOfBoundsException("Index is out of bounds");
@@ -58,12 +74,22 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
         --this.freeMemory;
     }
 
+    /**
+     * Returns the element at the specified position in this list
+     * @param index - index of the element to return
+     * @return The element at the specified position in the list
+     */
     @Override
     public T get(int index) {
         if (index >= this.array.length) throw new IndexOutOfBoundsException("Index is out of bounds");
         return this.array[index];
     }
 
+    /**
+     * Remove and return the element at the specified position in this list
+     * @param index - index of the element to remove and return
+     * @return The removed element from list
+     */
     @Override
     public T remove(int index) {
         if (index >= this.array.length) throw new IndexOutOfBoundsException("Index is out of bounds");
@@ -74,6 +100,11 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
         return toRemove;
     }
 
+    /**
+     * Removes the first occurrence of the specified
+     * @param element - element to be removed from this list, if present
+     * @return false if object is not present, else true
+     */
     @Override
     public boolean remove(T element) {
         int itemIndex = this.indexOf(element);
@@ -84,6 +115,9 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
         return true;
     }
 
+    /**
+     * Removes all of the elements from this list. The list will be empty after this call returns.
+     */
     @Override
     public void clear() {
         this.array = (T[]) Array.newInstance(objectType, 10);
@@ -91,6 +125,11 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
         this.lastFreeIndex = 0;
     }
 
+    /**
+     * Returns true if this list contains the specified element
+     * @param element - element whose presence in this list is to be tested
+     * @return true if this list contains the specified element
+     */
     @Override
     public boolean contains(T element) {
         for (T item : this.array) {
@@ -99,6 +138,12 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
         return false;
     }
 
+
+    /**
+     * Sorts this list according to the order induced by the specified Comparator.
+     * All elements in this list must be mutually comparable using the specified comparator
+     * @param comparator  - the Comparator used to compare list elements. A null value indicates that the elements natural ordering should be used
+     */
     @Override
     public void sort(Comparator<? super T> comparator) {
         this.quickSort(this.array, comparator, this.array.length);
@@ -108,10 +153,18 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
         if (size == 1) {
             return elements;
         } else if (size == 2) {
-            if (comparator.compare(elements[0], elements[1]) > 0) {
-                T temp = elements[0];
-                elements[0] = elements[1];
-                elements[1] = temp;
+            if (comparator != null) {
+                if (comparator.compare(elements[0], elements[1]) > 0) {
+                    T temp = elements[0];
+                    elements[0] = elements[1];
+                    elements[1] = temp;
+                }
+            } else {
+                if (elements[0].compareTo(elements[1]) > 0) {
+                    T temp = elements[0];
+                    elements[0] = elements[1];
+                    elements[1] = temp;
+                }
             }
             return elements;
         }
@@ -131,11 +184,20 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
     }
 
 
+    /**
+     * Returns the size of the array
+     * @return size of the array
+     */
     @Override
     public int size() {
         return this.array.length;
     }
 
+    /**
+     * Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not contain the element
+     * @param element - element to search for
+     * @return The index of the last occurrence of the specified element in this list, or -1 if this list does not contain the element
+     */
     @Override
     public int indexOf(T element) {
         for (int i = 0; i < this.array.length; ++i) {
