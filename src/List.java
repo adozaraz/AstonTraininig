@@ -8,6 +8,7 @@ public interface List<T> {
     boolean remove(T element);
     void clear();
     boolean contains(T element);
+    void sort();
     void sort(Comparator<? super T> comparator);
     int size();
     int indexOf(T element);
