@@ -209,8 +209,8 @@ public class ArrayList<T> implements List<T> {
         }
         int middle = size / 2;
         T pivot = elements.get(size / 2);
-        ArrayList<T> lowerHalf = new ArrayList<>();
-        ArrayList<T> upperHalf = new ArrayList<>();
+        ArrayList<T> lowerHalf = (ArrayList<T>) new ArrayList<>();
+        ArrayList<T> upperHalf = (ArrayList<T>) new ArrayList<>();
         for (int i = 0; i < size; ++i) {
             if (i == middle) continue;
             if (comparator == null) {
