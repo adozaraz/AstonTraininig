@@ -66,7 +66,7 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
      */
     @Override
     public void add(int index, T element) {
-        if (index >= this.array.length) throw new IndexOutOfBoundsException("Index is out of bounds");
+        if (index >= this.length) throw new IndexOutOfBoundsException("Index is out of bounds");
         if (this.freeMemory == 0) this.instantiateNewMemory();
         for (int i = this.length; i > index; --i) this.array[i] = this.array[i-1];
         this.array[index] = element;
@@ -93,7 +93,7 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
      */
     @Override
     public T get(int index) {
-        if (index >= this.array.length) throw new IndexOutOfBoundsException("Index is out of bounds");
+        if (index >= this.length) throw new IndexOutOfBoundsException("Index is out of bounds");
         return (T) this.array[index];
     }
 
@@ -104,7 +104,7 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
      */
     @Override
     public void set(int index, T element) {
-        if (index >= this.array.length) throw new IndexOutOfBoundsException("Index is out of bounds");
+        if (index >= this.length) throw new IndexOutOfBoundsException("Index is out of bounds");
         this.array[index] = element;
     }
 
@@ -115,7 +115,7 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
      */
     @Override
     public T remove(int index) {
-        if (index >= this.array.length) throw new IndexOutOfBoundsException("Index is out of bounds");
+        if (index >= this.length) throw new IndexOutOfBoundsException("Index is out of bounds");
         T toRemove = (T) this.array[index];
         for (int i = index; i < this.array.length-1; ++i) this.array[i] = this.array[i+1];
         ++this.freeMemory;
@@ -167,7 +167,7 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
      */
     @Override
     public void sort() {
-        this.quickSort(this, null, this.array.length);
+        this.quickSort(this, null, this.length);
     }
 
     /**
@@ -181,7 +181,7 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
     }
 
     private void quickSort(ArrayList<T> elements, Comparator<? super T> comparator, int size) {
-        if (size == 1) {
+        if (size == 1 || size == 0) {
             return;
         } else if (size == 2) {
             if (comparator != null) {
@@ -205,11 +205,16 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
         ArrayList<T> upperHalf = new ArrayList<>();
         for (int i = 0; i < size; ++i) {
             if (i == middle) continue;
-            if (elements.get(i).compareTo(pivot) < 0) lowerHalf.add(elements.get(i));
-            else upperHalf.add(elements.get(i));
+            if (comparator == null) {
+                if (elements.get(i).compareTo(pivot) < 0) lowerHalf.add(elements.get(i));
+                else upperHalf.add(elements.get(i));
+            } else {
+                if (comparator.compare(elements.get(i), pivot) < 0) lowerHalf.add(elements.get(i));
+                else upperHalf.add(elements.get(i));
+            }
         }
-        lowerHalf.sort();
-        upperHalf.sort();
+        lowerHalf.sort(comparator);
+        upperHalf.sort(comparator);
         lowerHalf.add(pivot);
         lowerHalf.add(upperHalf);
         this.array = lowerHalf.array;

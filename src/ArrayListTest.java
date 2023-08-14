@@ -6,7 +6,6 @@ import java.util.Comparator;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArrayListTest {
-
     @org.junit.jupiter.api.Test
     void add() {
         ArrayList<Integer> expected = new ArrayList<>(new Integer[] {1, 2, 3});
@@ -23,6 +22,10 @@ class ArrayListTest {
         actual.add(2, 4);
 
         assertEquals(expected, actual);
+
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            actual.add(5, 2);
+        });
     }
 
     @org.junit.jupiter.api.Test
@@ -42,6 +45,10 @@ class ArrayListTest {
         Integer actual = testArray.get(2);
 
         assertEquals(expected, actual);
+
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            testArray.get(10);
+        });
     }
 
     @org.junit.jupiter.api.Test
@@ -51,6 +58,10 @@ class ArrayListTest {
         actual.set(2, 7);
 
         assertEquals(expected, actual);
+
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            actual.set(10, 8);
+        });
     }
 
     @org.junit.jupiter.api.Test
@@ -59,6 +70,10 @@ class ArrayListTest {
         ArrayList<Integer> actual = new ArrayList<>(new Integer[]{1, 2, 3, 4, 6, 5});
         actual.remove(4);
         assertEquals(expected, actual);
+
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            actual.remove(10);
+        });
     }
 
     @org.junit.jupiter.api.Test
@@ -97,7 +112,7 @@ class ArrayListTest {
     @org.junit.jupiter.api.Test
     void defaultSort() {
         ArrayList<Integer> expected = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5});
-        ArrayList<Integer> actual = new ArrayList<>(new Integer[]{2, 3, 1, 8, 5});
+        ArrayList<Integer> actual = new ArrayList<>(new Integer[]{2, 3, 1, 4, 5});
         actual.sort();
         assertEquals(expected, actual);
     }
@@ -106,7 +121,7 @@ class ArrayListTest {
     void sort() {
         ArrayList<Integer> expected = new ArrayList<>(new Integer[]{5, 4, 3, 2, 1});
         ArrayList<Integer> actual = new ArrayList<>(new Integer[]{2, 3, 1, 5, 4});
-        actual.sort((o1, o2) -> -o1.compareTo(o2));
+        actual.sort(Comparator.reverseOrder());
         assertEquals(expected, actual);
     }
 
