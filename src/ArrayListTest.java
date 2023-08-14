@@ -26,10 +26,29 @@ class ArrayListTest {
     }
 
     @org.junit.jupiter.api.Test
+    void testAddCollection() {
+        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7});
+        ArrayList<Integer> actual = new ArrayList<>(new Integer[]{1, 2, 3, 4});
+        ArrayList<Integer> toAdd = new ArrayList<>(new Integer[]{5, 6, 7});
+        actual.add(toAdd);
+
+        assertEquals(expected, actual);
+    }
+
+    @org.junit.jupiter.api.Test
     void get() {
         Integer expected = 4;
         ArrayList<Integer> testArray = new ArrayList<>(new Integer[]{1, 2, 4});
         Integer actual = testArray.get(2);
+
+        assertEquals(expected, actual);
+    }
+
+    @org.junit.jupiter.api.Test
+    void set() {
+        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{1, 2, 7, 4, 5});
+        ArrayList<Integer> actual = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5});
+        actual.set(2, 7);
 
         assertEquals(expected, actual);
     }
@@ -111,5 +130,17 @@ class ArrayListTest {
         expected = -1;
         actual = checker.indexOf(toCheck);
         assertEquals(expected, actual);
+    }
+
+    @org.junit.jupiter.api.Test
+    void equals() {
+        ArrayList<Integer> toCheck = new ArrayList<>(new Integer[]{1, 2, 3});
+        ArrayList<Integer> checker = new ArrayList<>(new Integer[]{1, 2, 3});
+
+        assertTrue(toCheck.equals(checker));
+
+        checker = new ArrayList<>(new Integer[]{4, 3, 2, 1});
+
+        assertFalse(toCheck.equals(checker));
     }
 }
