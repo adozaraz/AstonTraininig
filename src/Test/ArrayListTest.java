@@ -1,6 +1,7 @@
-import org.junit.Assert;
+package Test;
 
-import java.sql.Array;
+import ArrayList.ArrayList;
+
 import java.util.Comparator;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,9 +24,7 @@ class ArrayListTest {
 
         assertEquals(expected, actual);
 
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            actual.add(5, 2);
-        });
+        assertThrows(IndexOutOfBoundsException.class, () -> actual.add(5, 2));
     }
 
     @org.junit.jupiter.api.Test
@@ -46,9 +45,7 @@ class ArrayListTest {
 
         assertEquals(expected, actual);
 
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            testArray.get(10);
-        });
+        assertThrows(IndexOutOfBoundsException.class, () -> testArray.get(10));
     }
 
     @org.junit.jupiter.api.Test
@@ -59,9 +56,7 @@ class ArrayListTest {
 
         assertEquals(expected, actual);
 
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            actual.set(10, 8);
-        });
+        assertThrows(IndexOutOfBoundsException.class, () -> actual.set(10, 8));
     }
 
     @org.junit.jupiter.api.Test
@@ -71,9 +66,7 @@ class ArrayListTest {
         actual.remove(4);
         assertEquals(expected, actual);
 
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            actual.remove(10);
-        });
+        assertThrows(IndexOutOfBoundsException.class, () -> actual.remove(10));
     }
 
     @org.junit.jupiter.api.Test
@@ -136,7 +129,7 @@ class ArrayListTest {
     @org.junit.jupiter.api.Test
     void indexOf() {
         ArrayList<Integer> checker = new ArrayList<>(new Integer[]{6, 10, 30, 255, 6});
-        Integer toCheck = 6;
+        int toCheck = 6;
         Integer expected = 0;
         Integer actual = checker.indexOf(toCheck);
         assertEquals(expected, actual);

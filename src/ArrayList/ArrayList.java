@@ -1,13 +1,14 @@
+package ArrayList;
+
 import java.util.Comparator;
 
 /**
- * ArrayList is an implementation of resizable array. Implements some of the list operations and permits all elements.
+ * ArrayList.ArrayList is an implementation of resizable array. Implements some of the list operations and permits all elements.
  * All ArrayLists have internal capacity, which tracks if new memory should be allocated.
- *
- * Be warned, that this ArrayList is not Synchronized.
+ * Be warned, that this ArrayList.ArrayList is not Synchronized.
  */
 @SuppressWarnings("unchecked")
-public class ArrayList<T extends Comparable<T>> implements List<T> {
+public class ArrayList<T> implements List<T> {
     private Object[] array;
     private int freeMemory;
 
@@ -18,7 +19,7 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
     /**
      * Constructs an empty list with an initial capacity of ten
      */
-    ArrayList() {
+    public ArrayList() {
         this.freeMemory = 10;
         this.array = new Object[this.freeMemory];
         this.lastFreeIndex = 0;
@@ -29,12 +30,19 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
      * Constructs a list containing the elements of the specified array, in the order they are placed
      * @param array - The array whose elements are to be placed into this list
      */
-    ArrayList(T[] array) {
+    public ArrayList(T[] array) {
         this.freeMemory = 10;
         this.array = new Object[array.length+this.freeMemory];
         for (int i = 0; i < array.length; ++i) this.array[i] = array[i];
         this.lastFreeIndex = array.length;
         this.length = array.length;
+    }
+
+    public ArrayList(int initialCapacity) {
+        this.freeMemory = initialCapacity;
+        this.array = new Object[this.freeMemory];
+        this.lastFreeIndex = 0;
+        this.length = 0;
     }
 
     private void instantiateNewMemory() {
@@ -76,7 +84,7 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
     }
 
     /**
-     * Adds the elements specified at the list, which implements interface List<>, at the end of this list
+     * Adds the elements specified at the list, which implements interface ArrayList.List<>, at the end of this list
      * @param list - list, which elements should be added to the end of this list
      */
     @Override
@@ -191,7 +199,7 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
                     elements.set(1, temp);
                 }
             } else {
-                if (elements.get(0).compareTo(elements.get(1)) > 0) {
+                if (((Comparable<T>) elements.get(0)).compareTo(elements.get(1)) > 0) {
                     T temp = elements.get(0);
                     elements.set(0, elements.get(1));
                     elements.set(1, temp);
@@ -206,7 +214,7 @@ public class ArrayList<T extends Comparable<T>> implements List<T> {
         for (int i = 0; i < size; ++i) {
             if (i == middle) continue;
             if (comparator == null) {
-                if (elements.get(i).compareTo(pivot) < 0) lowerHalf.add(elements.get(i));
+                if (((Comparable<T>) elements.get(i)).compareTo(pivot) < 0) lowerHalf.add(elements.get(i));
                 else upperHalf.add(elements.get(i));
             } else {
                 if (comparator.compare(elements.get(i), pivot) < 0) lowerHalf.add(elements.get(i));
