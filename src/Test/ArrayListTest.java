@@ -105,7 +105,7 @@ class ArrayListTest {
     @org.junit.jupiter.api.Test
     void defaultSort() {
         ArrayList<Integer> expected = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5});
-        ArrayList<Integer> actual = new ArrayList<>(new Integer[]{2, 3, 1, 4, 5});
+        ArrayList<Integer> actual = new ArrayList<>(new Integer[]{3, 2, 1, 5, 4});
         actual.sort();
         assertEquals(expected, actual);
     }

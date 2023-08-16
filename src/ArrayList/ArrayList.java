@@ -175,7 +175,7 @@ public class ArrayList<T> implements List<T> {
      */
     @Override
     public void sort() {
-        this.quickSort(this, null, this.length);
+        this.quickSort(this.array, null, this.length);
     }
 
     /**
@@ -185,50 +185,63 @@ public class ArrayList<T> implements List<T> {
      */
     @Override
     public void sort(Comparator<? super T> comparator) {
-        this.quickSort(this, comparator, this.length);
+        this.quickSort(this.array, comparator, this.length);
     }
 
-    private void quickSort(ArrayList<T> elements, Comparator<? super T> comparator, int size) {
+    private void quickSort(Object[] elements, Comparator<? super T> comparator, int size) {
         if (size == 1 || size == 0) {
             return;
         } else if (size == 2) {
             if (comparator != null) {
-                if (comparator.compare(elements.get(0), elements.get(0)) > 0) {
-                    T temp = elements.get(0);
-                    elements.set(0, elements.get(1));
-                    elements.set(1, temp);
+                if (comparator.compare((T) elements[0],(T) elements[1]) > 0) {
+                    Object temp = elements[0];
+                    elements[0] = elements[1];
+                    elements[1] = temp;
                 }
             } else {
-                if (((Comparable<T>) elements.get(0)).compareTo(elements.get(1)) > 0) {
-                    T temp = elements.get(0);
-                    elements.set(0, elements.get(1));
-                    elements.set(1, temp);
+                if (((Comparable<T>) elements[0]).compareTo((T) elements[1]) > 0) {
+                    Object temp = elements[0];
+                    elements[0] = elements[1];
+                    elements[1] = temp;
                 }
             }
             return;
         }
         int middle = size / 2;
-        T pivot = elements.get(size / 2);
-        ArrayList<T> lowerHalf = (ArrayList<T>) new ArrayList<>();
-        ArrayList<T> upperHalf = (ArrayList<T>) new ArrayList<>();
+        T pivot = (T) elements[size / 2];
+        Object[] lowerHalf = new Object[size];
+        int lowerIndex = 0;
+        Object[] upperHalf = new Object[size];
+        int upperIndex = 0;
         for (int i = 0; i < size; ++i) {
             if (i == middle) continue;
             if (comparator == null) {
-                if (((Comparable<T>) elements.get(i)).compareTo(pivot) < 0) lowerHalf.add(elements.get(i));
-                else upperHalf.add(elements.get(i));
+                if (((Comparable<T>) elements[i]).compareTo(pivot) < 0) {
+                    lowerHalf[lowerIndex] = elements[i];
+                    ++lowerIndex;
+                }
+                else {
+                    upperHalf[upperIndex] = elements[i];
+                    ++upperIndex;
+                }
             } else {
-                if (comparator.compare(elements.get(i), pivot) < 0) lowerHalf.add(elements.get(i));
-                else upperHalf.add(elements.get(i));
+                if (comparator.compare((T) elements[i], pivot) < 0) {
+                    lowerHalf[lowerIndex] = elements[i];
+                    ++lowerIndex;
+                }
+                else {
+                    upperHalf[upperIndex] = elements[i];
+                    ++upperIndex;
+                }
             }
         }
-        lowerHalf.sort(comparator);
-        upperHalf.sort(comparator);
-        lowerHalf.add(pivot);
-        lowerHalf.add(upperHalf);
-        this.array = lowerHalf.array;
-        this.length = lowerHalf.length;
-        this.freeMemory = lowerHalf.freeMemory;
-        this.lastFreeIndex = lowerHalf.lastFreeIndex;
+        this.quickSort(lowerHalf, comparator, lowerIndex);
+        this.quickSort(upperHalf, comparator, upperIndex);
+        int index = 0;
+        for (int i = 0; i < lowerIndex; ++i, ++index) elements[index] = lowerHalf[i];
+        elements[index] = pivot;
+        ++index;
+        for (int i = 0; i < upperIndex; ++i, ++index) elements[index] = upperHalf[i];
     }
 
 
